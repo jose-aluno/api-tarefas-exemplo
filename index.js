@@ -64,6 +64,17 @@ app.put('/tarefas/:id', (req, res) => {
   res.json(tarefa);
 });
 
+app.delete('/tarefas/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const indice = tarefas.findIndex((t) => t.id === id);
+ 
+  if (indice === -1) {
+    return res.status(404).json({ erro: 'Tarefa não encontrada' });
+  }
+ 
+  tarefas.splice(indice, 1);
+  res.status(204).send();
+});
  
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
