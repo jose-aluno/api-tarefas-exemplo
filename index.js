@@ -41,6 +41,29 @@ app.post('/tarefas', (req, res) => {
  
   res.status(201).json(novaTarefa);
 });
+
+app.put('/tarefas/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const tarefa = tarefas.find((t) => t.id === id);
+ 
+  if (!tarefa) {
+    return res.status(404).json({ erro: 'Tarefa não encontrada' });
+  }
+ 
+  const { titulo, concluida } = req.body ?? {};
+ 
+  if (!titulo) {
+    return res.status(400).json({ erro: 'O campo "titulo" é obrigatório' });
+  }
+ 
+  tarefa.titulo = titulo;
+  if (typeof concluida === 'boolean') {
+    tarefa.concluida = concluida;
+  }
+ 
+  res.json(tarefa);
+});
+
  
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
