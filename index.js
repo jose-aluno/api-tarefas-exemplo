@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
 const PORT = 3000;
 
 // Persistência em memória
@@ -26,6 +27,19 @@ app.get('/tarefas/:id', (req, res) => {
   }
  
   res.json(tarefa);
+});
+
+app.post('/tarefas', (req, res) => {
+  const titulo = req.body?.titulo;
+ 
+  if (!titulo) {
+    return res.status(400).json({ erro: 'O campo "titulo" é obrigatório' });
+  }
+ 
+  const novaTarefa = { id: proximoId++, titulo, concluida: false };
+  tarefas.push(novaTarefa);
+ 
+  res.status(201).json(novaTarefa);
 });
  
 app.listen(PORT, () => {
